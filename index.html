@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Таблица ДТП Республики Саха (Якутия) за 2017–2024 годы</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="hero">
+    <nav class="top-nav" aria-label="Навигация по сайту">
+      <a class="nav-link active" href="index.html">Таблица</a>
+      <a class="nav-link" href="dashboard.html">Дашборд и карта</a>
+    </nav>
+    <div>
+      <p class="eyebrow">Интерактивный справочник</p>
+      <h1>Таблица ДТП Республики Саха (Якутия) за 2017–2024 годы</h1>
+      <p class="subtitle">Таблица составлена на основе открытых данных «Показатели состояния дорожного движения» ГИБДД МВД РФ.</p>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel controls" aria-label="Панель управления таблицей">
+      <label class="search-block">
+        <span>Общий поиск</span>
+        <input id="globalSearch" type="search" placeholder="Введите текст для поиска по всей таблице…" autocomplete="off">
+      </label>
+
+      <label class="select-block">
+        <span>Строк на странице</span>
+        <select id="pageSize">
+          <option value="25">25</option>
+          <option value="50" selected>50</option>
+          <option value="100">100</option>
+          <option value="250">250</option>
+        </select>
+      </label>
+
+      <button id="resetFilters" class="button secondary" type="button">Сбросить фильтры</button>
+      <button id="exportCsv" class="button" type="button">Скачать отфильтрованное CSV</button>
+    </section>
+
+    <section class="summary" aria-live="polite">
+      <div class="summary-card">
+        <span class="summary-label">Всего строк</span>
+        <strong id="totalRows">—</strong>
+      </div>
+      <div class="summary-card">
+        <span class="summary-label">Показано после фильтров</span>
+        <strong id="filteredRows">—</strong>
+      </div>
+      <div class="summary-card wide">
+        <span class="summary-label">Текущая страница</span>
+        <strong id="pageInfo">—</strong>
+      </div>
+    </section>
+
+    <section class="table-card">
+      <div class="table-hint">Подсказка: чтобы отфильтровать конкретный столбец, введите значение в поле под его названием. Фильтр работает по вхождению текста.</div>
+      <div class="table-wrapper">
+        <table id="dataTable">
+          <thead id="tableHead"></thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <button id="prevPage" class="button secondary" type="button">← Назад</button>
+        <div id="paginationText" class="pagination-text">—</div>
+        <button id="nextPage" class="button secondary" type="button">Вперёд →</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="data_columns.js"></script>
+  <script src="data_rows_01.js"></script>
+  <script src="data_rows_02.js"></script>
+  <script src="data_rows_03.js"></script>
+  <script src="data_rows_04.js"></script>
+  <script>window.TABLE_ROWS = [].concat(window.TABLE_ROWS_PART_01 || [],window.TABLE_ROWS_PART_02 || [],window.TABLE_ROWS_PART_03 || [],window.TABLE_ROWS_PART_04 || []);</script>
+  <script src="script.js"></script>
+</body>
+</html>

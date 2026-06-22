@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Дашборд ДТП Республики Саха (Якутия)</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <header class="hero dashboard-hero">
+    <nav class="top-nav" aria-label="Навигация по сайту">
+      <a class="nav-link" href="index.html">Таблица</a>
+      <a class="nav-link active" href="dashboard.html">Дашборд и карта</a>
+    </nav>
+    <div>
+      <p class="eyebrow">Интерактивная аналитика</p>
+      <h1>Дашборд ДТП Республики Саха (Якутия) за 2017–2024 годы</h1>
+      <p class="subtitle">Сводные показатели, карта мест ДТП по координатам «Широта» и «Долгота», а также графики пересчитываются после выбора периода и фильтров.</p>
+    </div>
+  </header>
+
+  <main class="layout dashboard-layout">
+    <section class="panel dashboard-controls" aria-label="Фильтры дашборда">
+      <label class="search-block">
+        <span>Поиск по ДТП</span>
+        <input id="dashSearch" type="search" placeholder="Адрес, вид ДТП, погода, район…" autocomplete="off">
+      </label>
+
+      <label class="select-block">
+        <span>Дата с</span>
+        <input id="dateFrom" type="date">
+      </label>
+
+      <label class="select-block">
+        <span>Дата по</span>
+        <input id="dateTo" type="date">
+      </label>
+
+      <div class="filter-grid" id="filterGrid"></div>
+
+      <div class="dashboard-buttons">
+        <button id="resetDashboard" class="button secondary" type="button">Сбросить фильтры</button>
+        <button id="exportDashboardCsv" class="button" type="button">Скачать сводку CSV</button>
+      </div>
+    </section>
+
+    <section class="kpi-grid" aria-live="polite">
+      <div class="kpi-card accent-card">
+        <span class="summary-label">ДТП после фильтров</span>
+        <strong id="kpiAccidents">—</strong>
+        <small id="kpiPeriod">—</small>
+      </div>
+      <div class="kpi-card">
+        <span class="summary-label">Погибшие</span>
+        <strong id="kpiDeaths">—</strong>
+        <small>Сумма по уникальным ДТП</small>
+      </div>
+      <div class="kpi-card">
+        <span class="summary-label">Раненые</span>
+        <strong id="kpiInjured">—</strong>
+        <small>Сумма по уникальным ДТП</small>
+      </div>
+      <div class="kpi-card">
+        <span class="summary-label">Участники</span>
+        <strong id="kpiParticipants">—</strong>
+        <small>Всего участников ДТП</small>
+      </div>
+      <div class="kpi-card">
+        <span class="summary-label">Транспортные средства</span>
+        <strong id="kpiVehicles">—</strong>
+        <small>Всего ТС в ДТП</small>
+      </div>
+      <div class="kpi-card">
+        <span class="summary-label">Точек на карте</span>
+        <strong id="kpiMapPoints">—</strong>
+        <small>Только ДТП с корректными координатами</small>
+      </div>
+    </section>
+
+    <section class="map-card panel">
+      <div class="card-heading">
+        <div>
+          <h2>Карта мест ДТП</h2>
+          <p>Маркеры сгруппированы в кластеры. Нажмите на точку, чтобы увидеть карточку ДТП.</p>
+        </div>
+        <span id="mapStatus" class="status-pill">—</span>
+      </div>
+      <div id="map" class="map"></div>
+    </section>
+
+    <section class="charts-grid compact-charts" aria-label="Краткая динамика ДТП">
+      <article class="chart-card panel">
+        <div class="card-heading compact"><h2>ДТП по годам</h2></div>
+        <div class="chart-box"><canvas id="yearChart"></canvas></div>
+      </article>
+      <article class="chart-card panel">
+        <div class="card-heading compact"><h2>ДТП по месяцам</h2></div>
+        <div class="chart-box"><canvas id="monthChart"></canvas></div>
+      </article>
+      <article class="chart-card panel">
+        <div class="card-heading compact"><h2>ДТП по дням недели</h2></div>
+        <div class="chart-box"><canvas id="weekdayChart"></canvas></div>
+      </article>
+    </section>
+
+    <section class="panel note-card">
+      <strong>Как считаются показатели:</strong>
+      <span>сводка строится по уникальному полю UUID. Если в исходной таблице одно ДТП представлено несколькими строками участников или транспортных средств, оно учитывается один раз, чтобы не задваивать погибших, раненых и участников.</span>
+    </section>
+  </main>
+
+  <script src="data_columns.js"></script>
+  <script src="data_rows_01.js"></script>
+  <script src="data_rows_02.js"></script>
+  <script src="data_rows_03.js"></script>
+  <script src="data_rows_04.js"></script>
+  <script>window.TABLE_ROWS = [].concat(window.TABLE_ROWS_PART_01 || [],window.TABLE_ROWS_PART_02 || [],window.TABLE_ROWS_PART_03 || [],window.TABLE_ROWS_PART_04 || []);</script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>
